@@ -110,14 +110,32 @@ RUN cd / \
     && rm -r libRadtran-${LIBRADTRAN} \
     && rm libRadtran-${LIBRADTRAN}.tar.gz
 
+    ## update cmake
+RUN cd / \
+    && wget https://github.com/Kitware/CMake/releases/download/v3.14.0/cmake-3.14.0-Linux-x86_64.sh \
+    && mkdir -p /cmake \
+    && ./cmake-3.14.0-Linux-x86_64.sh --prefix=/cmake --skip-license
+
+    ## install / update llvm
+RUN cd / \
+    && wget http://releases.llvm.org/7.0.0/llvm-7.0.0.src.tar.xz \
+    && unxz llvm-7.0.0.src.tar.xz \
+    && tar -xvf llvm-7.0.0.src.tar \
+    && mkdir -p llvm \
+    && cd /llvm \
+    && /cmake/bin/cmake ../llvm-7.0.0.src/ \
+    && cmake --build . \
+    && cmake --build . --target install
+# cmake -DCMAKE_INSTALL_PREFIX=/tmp/llvm -P cmake_install.cmake
+
    ## build Python updates
 RUN echo "*** Installing Python3 Modules "
 RUN cd / \
+    && python3 -m pip install llvmlite \
     && python3 -m pip install numpy \
     && python3 -m pip install scipy \
-    && python3 -m pip install llvmlite \
-    && python3 -m pip install numba \
     && python3 -m pip install matplotlib \
+    && python3 -m pip install numba \
     && python3 -m pip install scikit-learn \
     && python3 -m pip install spectral \
     && python3 -m pip install pytest \
@@ -131,5 +149,7 @@ RUN cd / \
     && chown isofit -R /isofit \
     && chmod 775 -R /isofit
 
+    ## Set Python Path
+ENV PYTHONPATH="${PYTHONPATH}:/isofit/isofit:/isofit/utils"
 
 ### EOF
