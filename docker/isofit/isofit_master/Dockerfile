@@ -102,7 +102,10 @@ RUN cd / \
     && tar -zxvf flex-2.6.4.tar.gz \
     && cd flex-2.6.4 \
     && ./autogen.sh \
-    && ./configure && make && make install
+    && ./configure && make && make install \
+    && cd / \
+    && rm flex-2.6.4.tar.gz \
+    && rm -r flex-2.6.4
 
    ## build libradtran
 RUN echo "*** Compiling libradtran " ${LIBRADTRAN}
@@ -111,11 +114,20 @@ RUN cd / \
     && tar -zxvf libRadtran-${LIBRADTRAN}.tar.gz \
     && cd libRadtran-${LIBRADTRAN} \
     && ./configure \
-    && make
+    && make \
+    && cd / \
+    && rm -r libRadtran-${LIBRADTRAN} \
+    && rm libRadtran-${LIBRADTRAN}.tar.gz
 
 RUN cd / \
     && python3 -m pip install numpy \
     && python3 -m pip install scipy \
-    && python3 -m pip install numba
+    && python3 -m pip install numba \
+    && python3 -m pip install matplotlib \
+    && python3 -m pip install scikit-learn \
+    && python3 -m pip install spectral \
+    && python3 -m pip install pytest \
+    && python3 -m pip install pep8 \
+    && python3 -m pip install xxhash
 
 ### EOF
