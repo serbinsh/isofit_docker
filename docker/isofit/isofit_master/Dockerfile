@@ -114,6 +114,7 @@ RUN cd / \
     && make
 
 RUN cd / \
+    && python3 -m pip install numpy \
     && python3 -m pip install scipy \
     && python3 -m pip install numba
 
