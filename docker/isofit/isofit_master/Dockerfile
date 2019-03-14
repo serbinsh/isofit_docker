@@ -115,6 +115,7 @@ RUN echo "*** Installing Python3 Modules "
 RUN cd / \
     && python3 -m pip install numpy \
     && python3 -m pip install scipy \
+    && python3 -m pip install llvmlite \
     && python3 -m pip install numba \
     && python3 -m pip install matplotlib \
     && python3 -m pip install scikit-learn \
