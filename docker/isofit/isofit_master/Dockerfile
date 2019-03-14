@@ -5,7 +5,7 @@
 FROM gcc:6.5
 MAINTAINER S.P. Serbin email: sserbin@bnl.gov
 
-RUN useradd -ms /bin/bash clmuser
+RUN useradd -ms /bin/bash isofit
 
 # Set a few variables that can be used to control the docker build
 ARG LIBRADTRAN=2.0.2
@@ -66,7 +66,9 @@ RUN apt-get update -y \
     libhdf5-serial-dev \
     autopoint \
     gsl-bin \
-    libgsl0-dev
+    libgsl0-dev \
+    llvm \
+    clang
 
     ## Install program to configure locales
 RUN dpkg-reconfigure locales && \
@@ -119,6 +121,8 @@ RUN cd / \
     && rm -r libRadtran-${LIBRADTRAN} \
     && rm libRadtran-${LIBRADTRAN}.tar.gz
 
+   ## build Python updates
+RUN echo "*** Installing Python3 Modules "
 RUN cd / \
     && python3 -m pip install numpy \
     && python3 -m pip install scipy \
@@ -129,5 +133,13 @@ RUN cd / \
     && python3 -m pip install pytest \
     && python3 -m pip install pep8 \
     && python3 -m pip install xxhash
+
+   ## build Python updates
+RUN echo "*** Installing isofit "
+RUN cd / \
+    && git -c http.sslVerify=false clone https://github.com/isofit/isofit.git \
+    && chown isofit -R /isofit \
+    && chmod 775 -R /isofit
+
 
 ### EOF
