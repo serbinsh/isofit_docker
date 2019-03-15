@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------
-# Debian baseOS docker container to use with CTSM builds
+# Debian isofit docker container
 # ----------------------------------------------------------------------
 
 FROM gcc:7.4.0
