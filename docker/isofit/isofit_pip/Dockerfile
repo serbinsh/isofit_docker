@@ -2,7 +2,7 @@
 # Debian baseOS docker container to use with CTSM builds
 # ----------------------------------------------------------------------
 
-FROM gcc:7.4.0
+FROM gcc:6.5
 MAINTAINER S.P. Serbin email: sserbin@bnl.gov
 
 RUN useradd -ms /bin/bash isofit
@@ -12,7 +12,6 @@ ARG LIBRADTRAN=2.0.2
 
 # Update the system and install initial dependencies
 RUN apt-get update -y \
-    && apt-get upgrade -y \
     && apt-get install -y \
     cmake \
     git \
@@ -27,6 +26,9 @@ RUN apt-get update -y \
     libxml2 \
     libxml2-dev \
     csh \
+    liblapack-dev \
+    libblas-dev \
+    liblapack-dev \
     libffi6 \
     libffi-dev \
     libxml-libxml-perl \
@@ -45,8 +47,8 @@ RUN apt-get update -y \
     ftp \
     apt-transport-https \
     locales \
-    libjson-c3 \
-    libjson-c-dev \
+    libjson0 \
+    libjson0-dev \
     libjson-perl \
     netcdf-bin \
     libnetcdf-dev \
@@ -55,7 +57,21 @@ RUN apt-get update -y \
     gsl-bin \
     libgsl0-dev \
     llvm \
-    bison
+    clang
+
+    ## Install program to configure locales
+RUN dpkg-reconfigure locales && \
+  locale-gen C.UTF-8 && \
+    /usr/sbin/update-locale LANG=C.UTF-8
+RUN echo 'en_US.UTF-8 UTF-8' >> /etc/locale.gen && \
+      locale-gen
+   ## Set default locale for the environment
+ENV LC_ALL C.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US.UTF-8
+
+   ## check locales
+RUN locale -a
 
 ## Compile Expat XML parser
 RUN echo "*** Compiling Expat XML parser"
@@ -90,44 +106,19 @@ RUN cd / \
     && cd libRadtran-${LIBRADTRAN} \
     && ./configure \
     && make \
-    && cd /libRadtran-${LIBRADTRAN} \
-    && wget -O reptran_2017_all.tar.gz http://www.meteo.physik.uni-muenchen.de/~libradtran/lib/exe/fetch.php?media=download:reptran_2017_all.tar.gz \
-    && tar -zxvf reptran_2017_all.tar.gz \
-    && rm reptran_2017_all.tar.gz \
     && cd / \
-    && rm libRadtran-${LIBRADTRAN}.tar.gz \
-    && chown isofit -R /libRadtran-${LIBRADTRAN}
+    && rm -r libRadtran-${LIBRADTRAN} \
+    && rm libRadtran-${LIBRADTRAN}.tar.gz
 
    ## build Python updates
 RUN echo "*** Installing Python3 Modules "
 RUN cd / \
-    && pip3 install --upgrade pip \
-    && python3 -m pip install 'llvmlite==0.15.0' \
-    && python3 -m pip install numpy \
-    && python3 -m pip install scipy \
-    && python3 -m pip install matplotlib \
-    && python3 -m pip install numba \
-    && python3 -m pip install scikit-learn \
-    && python3 -m pip install spectral \
-    && python3 -m pip install pytest \
-    && python3 -m pip install pep8 \
-    && python3 -m pip install xxhash
+    && pip3 install numpy \
+    && pip3 install scipy \
+    && pip3 install "matplotlib==2.2.4" \
+    && python3 pip install isofit
 
-   ## build Python updates
-RUN echo "*** Installing isofit "
-RUN cd / \
-    && git -c http.sslVerify=false clone https://github.com/isofit/isofit.git \
-    && chown isofit -R /isofit \
-    && chmod 775 -R /isofit
-
-RUN cd / \
-    && mkdir -p output \
-    && chown isofit -R /output \
-    && chmod 775 -R /output
-
-    ## Set Python Path and other environment variables
+    ## Set Python Path
 ENV PYTHONPATH="${PYTHONPATH}:/isofit/isofit:/isofit/utils"
-ENV ISOFIT_BASE=/isofit
-ENV LIBRADTRAN_DIR=/libRadtran-${LIBRADTRAN}
 
 ### EOF
