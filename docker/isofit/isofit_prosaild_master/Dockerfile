@@ -131,7 +131,7 @@ RUN echo "*** Compiling PROSAIL_D "
 RUN cd / \
     && wget http://teledetection.ipgp.jussieu.fr/prosail/PROSAIL_D_Fortran.zip \
     && unzip PROSAIL_D_Fortran.zip \
-    && chown prosail -R /PROSAIL_D_FORTRAN \
+    && chown isofit -R /PROSAIL_D_FORTRAN \
     && chmod 775 -R /PROSAIL_D_FORTRAN \
     && cd PROSAIL_D_FORTRAN \
     && rm main_PROSAIL.f90 \
