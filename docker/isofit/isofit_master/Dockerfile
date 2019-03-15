@@ -98,7 +98,7 @@ RUN cd / \
     && rm libRadtran-${LIBRADTRAN}.tar.gz \
     && chown isofit -R /libRadtran-${LIBRADTRAN}
 
-   ## build Python updates
+    ## build Python modules
 RUN echo "*** Installing Python3 Modules "
 RUN cd / \
     && pip3 install --upgrade pip \
@@ -113,7 +113,7 @@ RUN cd / \
     && python3 -m pip install pep8 \
     && python3 -m pip install xxhash
 
-   ## build Python updates
+    ## build Python updates
 RUN echo "*** Installing isofit "
 RUN cd / \
     && git -c http.sslVerify=false clone https://github.com/isofit/isofit.git \

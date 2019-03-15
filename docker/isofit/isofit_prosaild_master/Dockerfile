@@ -98,7 +98,7 @@ RUN cd / \
     && rm libRadtran-${LIBRADTRAN}.tar.gz \
     && chown isofit -R /libRadtran-${LIBRADTRAN}
 
-    ## build Python updates
+    ## build Python modules
 RUN echo "*** Installing Python3 Modules "
 RUN cd / \
     && pip3 install --upgrade pip \
