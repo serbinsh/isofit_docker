@@ -1,2 +1,5 @@
 # Mac OSX chaff
 .DS_Store
+
+# iPython
+.ipynb_checkpoints
