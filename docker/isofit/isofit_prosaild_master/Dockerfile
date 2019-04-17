@@ -117,6 +117,7 @@ RUN cd / \
 RUN echo "*** Installing isofit "
 RUN cd / \
     && git -c http.sslVerify=false clone https://github.com/isofit/isofit.git \
+    && mkdir -p /isofit/examples/20171108_Pasadena/lut \
     && chown isofit -R /isofit \
     && chmod 775 -R /isofit
 
@@ -137,7 +138,7 @@ RUN cd / \
     && rm main_PROSAIL.f90 \
     && wget https://raw.githubusercontent.com/serbinsh/prosail_docker/master/src/prosail_d/main_PROSAIL.f90 \
     && gfortran -o prosail.exe MODULE_PRO4SAIL.f90 dataSpec_PDB.f90 main_PROSAIL.f90 LIDF.f90 dladgen.f PRO4SAIL.f90 prospect_DB.f90 tav_abs.f90 volscatt.f90 \
-    && ./prosail.exe 1.5 55 2 2 0 0.009 0.009 -0.35 -0.15 1 5 0.1 30 10 0
+    && ./prosail.exe 1.5 55 2 2 0 0.009 0.009 -0.35 -0.15 1 5 0.1 30 10 0 0.85
 
     ## Create script folder
 RUN cd / \
