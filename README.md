@@ -3,6 +3,8 @@ A repository for building an isofit (https://github.com/isofit/isofit) Docker co
 
 Docker hub location: https://hub.docker.com/r/serbinsh/isofit_containers
 
+GitHub location: https://github.com/serbinsh/isofit_docker
+
 ### Instructions for running the LibRadTran example:
 
 1) Install the Docker engine: https://www.docker.com/get-started
