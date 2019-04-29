@@ -113,17 +113,32 @@ RUN cd / \
     && python3 -m pip install pep8 \
     && python3 -m pip install xxhash
 
-    ## build Python updates
+    ## Grab isofit from GitHub 
 RUN echo "*** Installing isofit "
 RUN cd / \
     && git -c http.sslVerify=false clone https://github.com/isofit/isofit.git \
+    && mkdir -p /isofit/examples/20171108_Pasadena/lut \
     && chown isofit -R /isofit \
     && chmod 775 -R /isofit
 
+    ## Create general output directory
 RUN cd / \
     && mkdir -p output \
     && chown isofit -R /output \
     && chmod 775 -R /output
+
+    ## Create script folder to hold custom run scripts, plotting scripts, etc
+RUN cd / \
+    && mkdir -p analysis_scripts \
+    && chown isofit -R /analysis_scripts \
+    && chmod 775 -R /analysis_scripts
+
+    ## change permissions on tmp dirs to use in isofit
+RUN cd / \
+    && chown isofit -R /tmp \
+    && chmod 775 -R /tmp \
+    && chown isofit -R /var/tmp \
+    && chmod 775 -R /var/tmp
 
     ## Set Python Path and other environment variables
 ENV PYTHONPATH="${PYTHONPATH}:/isofit/isofit:/isofit/utils"

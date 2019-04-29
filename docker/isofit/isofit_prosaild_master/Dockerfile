@@ -140,7 +140,7 @@ RUN cd / \
     && gfortran -o prosail.exe MODULE_PRO4SAIL.f90 dataSpec_PDB.f90 main_PROSAIL.f90 LIDF.f90 dladgen.f PRO4SAIL.f90 prospect_DB.f90 tav_abs.f90 volscatt.f90 \
     && ./prosail.exe 1.5 55 2 2 0 0.009 0.009 -0.35 -0.15 1 5 0.1 30 10 0 0.85
 
-    ## Create script folder
+    ## Create script folder to hold custom run scripts, plotting scripts, etc
 RUN cd / \
     && mkdir -p analysis_scripts \
     && chown isofit -R /analysis_scripts \
@@ -148,6 +148,13 @@ RUN cd / \
     && cd /analysis_scripts \
     && wget https://raw.githubusercontent.com/serbinsh/prosail_docker/master/analysis_scripts/simple_prosail_plot.py \
     && chmod 775 simple_prosail_plot.py
+
+    ## change permissions on tmp dirs to use in isofit
+RUN cd / \
+    && chown isofit -R /tmp \
+    && chmod 775 -R /tmp \
+    && chown isofit -R /var/tmp \
+    && chmod 775 -R /var/tmp
 
     ## Set Python Path and other environment variables
 ENV PYTHONPATH="${PYTHONPATH}:/isofit/isofit:/isofit/utils"
