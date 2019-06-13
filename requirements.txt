@@ -1,0 +1,10 @@
+llvmlite==0.15.0
+numpy
+scipy
+matplotlib
+numba
+scikit-learn
+spectral
+pytest
+pep8
+xxhash
